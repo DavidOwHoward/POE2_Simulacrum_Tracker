@@ -87,22 +87,7 @@ WebhookUrl="https://discord.com/api/webhooks/your_webhook_here"
 
 If Discord is disabled or the webhook URL is blank, the tracker will still save encounters locally.
 
-Config File Notes
 
-Your real config.ini should not be committed to GitHub because it contains your private Discord webhook URL.
-
-The repository should include:
-
-config.example.ini
-
-The repository should ignore:
-
-config.ini
-
-Recommended .gitignore entries:
-
-logs/
-config.ini
 Example Output
 Encounter 1
 -------------
@@ -121,6 +106,7 @@ Uniques
 -------------
 1. Example Unique
 2. Another Unique
+
 Current Scope
 
 This tracker is focused on Simulacrum encounter result tracking.
