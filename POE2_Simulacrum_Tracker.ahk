@@ -10,7 +10,15 @@
 AppName := "POE2 Simulacrum Tracker"
 AppVersion := "0.2.0"
 
-DiscordWebhookUrl := "" ; Phase 4 later
+; =============================================================
+; Configuration
+; =============================================================
+
+ConfigPath := A_ScriptDir "\config.ini"
+DiscordEnabled := false
+DiscordWebhookUrl := ""
+
+LoadConfig()
 
 ; ============================================================
 ; PROVIDED LISTS
@@ -393,6 +401,37 @@ GetNextEncounterNumber(filePath) {
 
     return count + 1
 }
+
+; ============================================================
+; CONFIG FUNCTIONS
+; ============================================================
+
+LoadConfig() {
+    global ConfigPath, DiscordEnabled, DiscordWebhookUrl
+
+    if !FileExist(ConfigPath) {
+        CreateDefaultConfig(ConfigPath)
+        DiscordEnabled := false
+        DiscordWebhookUrl := ""
+        return
+    }
+
+    enabledValue := IniRead(ConfigPath, "Discord", "Enabled", "false")
+    webhookValue := IniRead(ConfigPath, "Discord", "WebhookUrl", "")
+
+    DiscordEnabled := StrLower(Trim(enabledValue)) = "true"
+    DiscordWebhookUrl := Trim(webhookValue)
+}
+
+CreateDefaultConfig(configPath) {
+    defaultConfig := ""
+    defaultConfig .= "[Discord]`n"
+    defaultConfig .= "Enabled=false`n"
+    defaultConfig .= "WebhookUrl=`n"
+
+    FileAppend defaultConfig, configPath, "UTF-8"
+}
+
 
 ; ============================================================
 ; UI REFRESH
