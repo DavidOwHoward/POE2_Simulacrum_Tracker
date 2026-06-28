@@ -35,3 +35,22 @@ The application will have a "Submit Encounter" button which will have two functi
 To open the script(after it has been started), the user will press ctrl+space(^Space)
 
 The application will have a "Hide" button that hides the GUI, but does not remove the data
+
+Provided Lists
+
+Currency: [
+    "Mirror of Kalandra", "Hinekora Lock", "Divine", "Perfect Chaos", "Greater Chaos", "Chaos", "Orb of Annulment", "Perfect Exalted", 
+	"Greater Exalted", "Perfect Regal", "Greater Regal", "Perfect Jeweller", "Orb of Chance", 
+	"Perfect Augmentation", "Perfect Transmutation"
+]
+
+Uniques: [
+	"Megalomaniac", "Assailum", "Voices", "Perfidy", "Collapsing Horizon", "Strugglescream", "Melting Maelstrom"
+]
+
+Delirium Emotions: [ 
+"Diluted Liquid Ire","Diluted Liquid Guilt","Diluted Liquid Greed","Liquid Paranoia","Liquid Envy","Liquid Disgust","Liquid Despair","Concentrated Liquid Fear","Concentrated Liquid Suffering",
+"Concentrated Liquid Isolation","Ancient Diluted Liquid Ire","Ancient Diluted Liquid Guilt","Ancient Diluted Liquid Greed","Ancient Liquid Paranoia","Ancient Liquid Envy","Ancient Liquid Disgust",
+"Ancient Liquid Despair","Ancient Concentrated Liquid Fear","Ancient Concentrated Liquid Suffering","Ancient Concentrated Liquid Isolation","Potent Liquid Melancholy","Potent Liquid Ferocity",
+"Potent Liquid Contempt","Ancient Potent Liquid Melancholy","Ancient Potent Liquid Ferocity","Ancient Potent Liquid Contempt"
+]
