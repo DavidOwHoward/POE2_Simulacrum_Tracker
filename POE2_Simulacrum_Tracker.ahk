@@ -357,12 +357,19 @@ OnSubmitEncounter(*) {
 
         FileAppend output "`n", logPath, "UTF-8"
 
+        discordResult := SendSimulacrumToDiscord(output)
+
         ClearSimulacrum()
         ClearInputs()
         RefreshUI()
 
-        SetStatus("Encounter " encounterNumber " saved.")
-        MsgBox "Encounter " encounterNumber " saved.`n`n" logPath
+        if discordResult = "Posted" {
+            SetStatus("Encounter " encounterNumber " saved and posted.")
+            MsgBox "Encounter " encounterNumber " saved and posted to Discord.`n`n" logPath
+        } else {
+            SetStatus("Encounter " encounterNumber " saved locally.")
+            MsgBox "Encounter " encounterNumber " saved locally.`n`n" logPath
+        }
     } catch as err {
         SetStatus(err.Message)
         MsgBox err.Message
@@ -432,6 +439,54 @@ CreateDefaultConfig(configPath) {
     FileAppend defaultConfig, configPath, "UTF-8"
 }
 
+; ============================================================
+; DISCORD FUNCTIONS
+; ============================================================
+
+SendSimulacrumToDiscord(message) {
+    global DiscordEnabled, DiscordWebhookUrl
+
+    if !DiscordEnabled
+        return "Skipped"
+
+    webhook := Trim(DiscordWebhookUrl)
+
+    if webhook = ""
+        return "Skipped"
+
+    quote := Chr(34)
+    codeFence := Chr(96) . Chr(96) . Chr(96)
+    content := codeFence . message . codeFence
+    escapedContent := JsonEscape(content)
+
+    payload := "{"
+    payload .= quote . "content" . quote
+    payload .= ":"
+    payload .= quote . escapedContent . quote
+    payload .= "}"
+
+    http := ComObject("WinHttp.WinHttpRequest.5.1")
+    http.Open("POST", webhook, false)
+    http.SetRequestHeader("Content-Type", "application/json")
+    http.Send(payload)
+
+    status := http.Status
+
+    if status < 200 || status >= 300
+        throw Error("Discord webhook failed. HTTP Status: " status)
+
+    return "Posted"
+}
+
+JsonEscape(value) {
+    value := StrReplace(value, "\", "\\")
+    value := StrReplace(value, Chr(34), "\" . Chr(34))
+    value := StrReplace(value, "`r", "")
+    value := StrReplace(value, "`n", "\n")
+    value := StrReplace(value, "`t", "\t")
+
+    return value
+}
 
 ; ============================================================
 ; UI REFRESH
