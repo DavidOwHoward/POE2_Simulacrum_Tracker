@@ -174,6 +174,17 @@ BuildGui() {
     clearBtn := TrackerGui.Add("Button", "x380 y+12 w100", "Clear")
     clearBtn.OnEvent("Click", OnClear)
 
+    submitBtn := TrackerGui.Add("Button", "x380 y+12 w120", "Submit Encounter")
+    submitBtn.OnEvent("Click", OnSubmitEncounter)
+
+    clearBtn := TrackerGui.Add("Button", "x+10 w80", "Clear")
+    clearBtn.OnEvent("Click", OnClear)
+
+    hideBtn := TrackerGui.Add("Button", "x+10 w80", "Hide")
+    hideBtn.OnEvent("Click", (*) => HideGui())
+
+StatusText := TrackerGui.Add("Text", "x380 y+10 w300", "Ready")
+
     hideBtn := TrackerGui.Add("Button", "x+10 w100", "Hide")
     hideBtn.OnEvent("Click", (*) => HideGui())
 
@@ -324,6 +335,63 @@ ClearInputs() {
     EmotionQtyEdit.Value := "1"
 
     UniqueList.Choose(0)
+}
+
+OnSubmitEncounter(*) {
+    global CurrentSimulacrum
+
+    try {
+        ValidateSimulacrumForSubmit(CurrentSimulacrum)
+
+        logPath := GetSimulacrumLogPath()
+        encounterNumber := GetNextEncounterNumber(logPath)
+        output := FormatSimulacrum(CurrentSimulacrum, encounterNumber)
+
+        FileAppend output "`n", logPath, "UTF-8"
+
+        ClearSimulacrum()
+        ClearInputs()
+        RefreshUI()
+
+        SetStatus("Encounter " encounterNumber " saved.")
+        MsgBox "Encounter " encounterNumber " saved.`n`n" logPath
+    } catch as err {
+        SetStatus(err.Message)
+        MsgBox err.Message
+    }
+}
+
+ValidateSimulacrumForSubmit(simulacrum) {
+    if simulacrum["CurrencyTotals"].Count = 0
+        && simulacrum["EmotionTotals"].Count = 0
+        && simulacrum["Uniques"].Length = 0 {
+        throw Error("Nothing to submit.")
+    }
+}
+
+GetSimulacrumLogPath() {
+    logDir := A_ScriptDir "\logs"
+
+    if !DirExist(logDir)
+        DirCreate(logDir)
+
+    return logDir "\Simulacrum_Log_" FormatTime(, "yyyy-MM-dd") ".txt"
+}
+
+GetNextEncounterNumber(filePath) {
+    if !FileExist(filePath)
+        return 1
+
+    content := FileRead(filePath)
+    count := 0
+    pos := 1
+
+    while pos := RegExMatch(content, "Encounter\s+\d+", &match, pos) {
+        count++
+        pos += StrLen(match[0])
+    }
+
+    return count + 1
 }
 
 ; ============================================================
