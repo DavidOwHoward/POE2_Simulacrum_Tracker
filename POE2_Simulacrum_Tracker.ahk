@@ -73,7 +73,7 @@ LiquidEmotionOptions := [
 ]
 
 UniqueOptions := [
-    "Megalomaniac", "Assailum", "Voices", "Perfidy", "Collapsing Horizon", "Strugglescream", "Melting Maelstrom"
+    "Megalomaniac", "Assailum", "Voices", "Perfidy", "Collapsing Horizon", "Strugglescream", "Melting Maelstrom", "Ravens Reflection"
 ]
 
 ; ============================================================
